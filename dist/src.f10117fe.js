@@ -1944,7 +1944,6 @@ var User =
 function () {
   function User(data) {
     this.data = data;
-    this.events = {};
   }
 
   User.prototype.get = function (propsName) {
@@ -1953,24 +1952,6 @@ function () {
 
   User.prototype.set = function (update) {
     this.data = __assign(__assign({}, this.data), update);
-  };
-
-  User.prototype.on = function (eventName, callback) {
-    var handlers = this.events[eventName] || [];
-    handlers.push(callback);
-    this.events[eventName] = handlers;
-  };
-
-  User.prototype.trigger = function (eventName) {
-    var handlers = this.events[eventName];
-
-    if (!handlers || handlers.length === 0) {
-      return;
-    }
-
-    handlers.forEach(function (callback) {
-      return callback();
-    });
   };
 
   User.prototype.fetch = function () {
