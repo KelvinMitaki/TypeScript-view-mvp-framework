@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { Eventing } from "./Eventing";
 interface UserProps {
   name?: string;
   age?: number;
@@ -9,6 +10,8 @@ export type Callback = () => void;
 
 export class User {
   constructor(private data: UserProps) {}
+  public event: Eventing = new Eventing();
+
   get(propsName: string): string | number {
     return this.data[propsName];
   }
