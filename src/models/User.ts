@@ -1,6 +1,8 @@
+import axios, { AxiosResponse } from "axios";
 interface UserProps {
   name?: string;
   age?: number;
+  id?: number;
 }
 
 type Callback = () => void;
@@ -25,5 +27,10 @@ export class User {
       return;
     }
     handlers.forEach((callback: Callback) => callback());
+  }
+  fetch(): void {
+    axios
+      .get(`http://localhost:3000/users/${this.get("id")}`)
+      .then((res: AxiosResponse) => this.set(res.data));
   }
 }

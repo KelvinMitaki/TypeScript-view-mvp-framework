@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "axios": "^0.20.0",
+    "json-server": "^0.16.1"
   }
 }
