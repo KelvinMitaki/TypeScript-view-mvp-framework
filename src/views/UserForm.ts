@@ -1,15 +1,20 @@
 import { User } from "../models/User";
 
 export class UserForm {
-  constructor(public parent: Element, public model: User) {}
-
-  eventsMap(): { [key: string]: () => void } {
+  constructor(public parent: Element, public model: User) {
+    this.bindModel();
+  }
+  private bindModel(): void {
+    this.model.on("change", () => {
+      this.render();
+    });
+  }
+  private eventsMap(): { [key: string]: () => void } {
     return {
-      "click:button": this.onButtonClick
+      "click:.setAge": this.setAgeClick
     };
   }
-
-  bindEvents(fragment: DocumentFragment): void {
+  private bindEvents(fragment: DocumentFragment): void {
     const events = this.eventsMap();
     Object.keys(events).forEach((key: string): void => {
       const [eventName, selector] = key.split(":");
@@ -18,25 +23,25 @@ export class UserForm {
       });
     });
   }
-  onButtonClick(): void {
-    console.log("Hi There");
+  render(): void {
+    this.parent.innerHTML = "";
+    const templateElement = document.createElement("template");
+    templateElement.innerHTML = this.template();
+    this.bindEvents(templateElement.content);
+    this.parent.append(templateElement.content);
   }
-
-  template(): string {
+  private setAgeClick = (): void => {
+    this.model.setRandomAge();
+  };
+  private template(): string {
     return `
         <div>
             <h1>User Form</h1>
             <p>User Name: ${this.model.get("name")}</p>
             <p>Age: ${this.model.get("age")}</p>
             <input/>
-            <button>Hi there</button>
+            <button class="setAge">Set Random Age</button>
         </div>
         `;
-  }
-  render(): void {
-    const templateElement = document.createElement("template");
-    templateElement.innerHTML = this.template();
-    this.bindEvents(templateElement.content);
-    this.parent.append(templateElement.content);
   }
 }

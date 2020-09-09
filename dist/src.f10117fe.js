@@ -2236,6 +2236,12 @@ function (_super) {
     });
   };
 
+  User.prototype.setRandomAge = function () {
+    this.set({
+      age: Math.round(Math.random() * 100)
+    });
+  };
+
   return User;
 }(Model_1.Model);
 
@@ -2252,13 +2258,29 @@ var UserForm =
 /** @class */
 function () {
   function UserForm(parent, model) {
+    var _this = this;
+
     this.parent = parent;
     this.model = model;
+
+    this.setAgeClick = function () {
+      _this.model.setRandomAge();
+    };
+
+    this.bindModel();
   }
+
+  UserForm.prototype.bindModel = function () {
+    var _this = this;
+
+    this.model.on("change", function () {
+      _this.render();
+    });
+  };
 
   UserForm.prototype.eventsMap = function () {
     return {
-      "click:button": this.onButtonClick
+      "click:.setAge": this.setAgeClick
     };
   };
 
@@ -2275,19 +2297,16 @@ function () {
     });
   };
 
-  UserForm.prototype.onButtonClick = function () {
-    console.log("Hi There");
-  };
-
-  UserForm.prototype.template = function () {
-    return "\n        <div>\n            <h1>User Form</h1>\n            <p>User Name: " + this.model.get("name") + "</p>\n            <p>Age: " + this.model.get("age") + "</p>\n            <input/>\n            <button>Hi there</button>\n        </div>\n        ";
-  };
-
   UserForm.prototype.render = function () {
+    this.parent.innerHTML = "";
     var templateElement = document.createElement("template");
     templateElement.innerHTML = this.template();
     this.bindEvents(templateElement.content);
     this.parent.append(templateElement.content);
+  };
+
+  UserForm.prototype.template = function () {
+    return "\n        <div>\n            <h1>User Form</h1>\n            <p>User Name: " + this.model.get("name") + "</p>\n            <p>Age: " + this.model.get("age") + "</p>\n            <input/>\n            <button class=\"setAge\">Set Random Age</button>\n        </div>\n        ";
   };
 
   return UserForm;
