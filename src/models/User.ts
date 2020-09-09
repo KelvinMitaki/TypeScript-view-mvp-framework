@@ -1,7 +1,7 @@
+import { Model } from "./Model";
+import { ApiSync } from "./ApiSync";
 import { Eventing } from "./Eventing";
-import { Sync } from "./Sync";
 import { Attributes } from "./Attributes";
-import { AxiosResponse } from "axios";
 export interface UserProps {
   name?: string;
   age?: number;
@@ -10,11 +10,12 @@ export interface UserProps {
 
 export type Callback = () => void;
 const rootUrl = "http://localhost:3000/users";
-export class User {
-  constructor(attrs: UserProps) {
-    this.attributes = new Attributes<UserProps>(attrs);
+export class User extends Model<UserProps> {
+  static buildUser(attrs: UserProps): User {
+    return new User(
+      new Attributes<UserProps>(attrs),
+      new Eventing(),
+      new ApiSync<UserProps>(rootUrl)
+    );
   }
-  private event: Eventing = new Eventing();
-  private sync: Sync<UserProps> = new Sync<UserProps>(rootUrl);
-  private attributes: Attributes<UserProps>;
 }
