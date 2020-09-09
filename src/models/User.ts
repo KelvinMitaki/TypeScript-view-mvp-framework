@@ -17,37 +17,4 @@ export class User {
   private event: Eventing = new Eventing();
   private sync: Sync<UserProps> = new Sync<UserProps>(rootUrl);
   private attributes: Attributes<UserProps>;
-
-  get get() {
-    return this.attributes.get;
-  }
-  get on() {
-    return this.event.on;
-  }
-
-  get trigger() {
-    return this.event.trigger;
-  }
-  set(userProps: UserProps): void {
-    this.attributes.set(userProps);
-    this.event.trigger("change");
-  }
-
-  fetch(): void {
-    const id = this.get("id");
-    if (typeof id !== "number") {
-      throw new Error("Id must be provided");
-    }
-    this.sync.fetch(id).then((res: AxiosResponse) => {
-      this.set(res.data);
-    });
-  }
-
-  save(): void {
-    const attr = this.attributes.getAll();
-    this.sync
-      .save(attr)
-      .then((res: AxiosResponse): void => this.trigger("save"))
-      .catch((): void => this.trigger("error"));
-  }
 }
