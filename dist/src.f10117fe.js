@@ -129,41 +129,40 @@ var UserForm =
 /** @class */
 function () {
   function UserForm(parent) {
-    var _this = this;
-
     this.parent = parent;
-
-    this.eventsMap = function () {
-      return {
-        "click:button": _this.onButtonClick
-      };
-    };
-
-    this.bindEvents = function (fragment) {
-      var events = _this.eventsMap;
-      Object.keys(events).forEach(function (key) {
-        var _a = key.split(":"),
-            eventName = _a[0],
-            selector = _a[1];
-
-        fragment.querySelectorAll(selector).forEach(function (element) {
-          element.addEventListener(eventName, events[key]);
-        });
-      });
-    };
   }
+
+  UserForm.prototype.eventsMap = function () {
+    return {
+      "click:button": this.onButtonClick
+    };
+  };
+
+  UserForm.prototype.bindEvents = function (fragment) {
+    var events = this.eventsMap();
+    Object.keys(events).forEach(function (key) {
+      var _a = key.split(":"),
+          eventName = _a[0],
+          selector = _a[1];
+
+      fragment.querySelectorAll(selector).forEach(function (element) {
+        element.addEventListener(eventName, events[key]);
+      });
+    });
+  };
 
   UserForm.prototype.onButtonClick = function () {
     console.log("Hi There");
   };
 
   UserForm.prototype.template = function () {
-    return "\n        <div>\n            <h1>User Form</h1>\n            <input/>\n        </div>\n        ";
+    return "\n        <div>\n            <h1>User Form</h1>\n            <input/>\n            <button>Hi there</button>\n        </div>\n        ";
   };
 
   UserForm.prototype.render = function () {
     var templateElement = document.createElement("template");
     templateElement.innerHTML = this.template();
+    this.bindEvents(templateElement.content);
     this.parent.append(templateElement.content);
   };
 
