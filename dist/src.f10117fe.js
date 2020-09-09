@@ -129,26 +129,28 @@ var Eventing =
 /** @class */
 function () {
   function Eventing() {
+    var _this = this;
+
     this.events = {};
+
+    this.on = function (eventName, callback) {
+      var handlers = _this.events[eventName] || [];
+      handlers.push(callback);
+      _this.events[eventName] = handlers;
+    };
+
+    this.trigger = function (eventName) {
+      var handlers = _this.events[eventName];
+
+      if (!handlers || handlers.length === 0) {
+        return;
+      }
+
+      handlers.forEach(function (callback) {
+        return callback();
+      });
+    };
   }
-
-  Eventing.prototype.on = function (eventName, callback) {
-    var handlers = this.events[eventName] || [];
-    handlers.push(callback);
-    this.events[eventName] = handlers;
-  };
-
-  Eventing.prototype.trigger = function (eventName) {
-    var handlers = this.events[eventName];
-
-    if (!handlers || handlers.length === 0) {
-      return;
-    }
-
-    handlers.forEach(function (callback) {
-      return callback();
-    });
-  };
 
   return Eventing;
 }();
@@ -1964,22 +1966,24 @@ var Sync =
 /** @class */
 function () {
   function Sync(rootUrl) {
+    var _this = this;
+
     this.rootUrl = rootUrl;
+
+    this.fetch = function (id) {
+      return axios_1.default.get(_this.rootUrl + "/" + id);
+    };
+
+    this.save = function (data) {
+      var id = data.id;
+
+      if (id) {
+        return axios_1.default.put(_this.rootUrl + "/" + id, data);
+      }
+
+      return axios_1.default.post(_this.rootUrl, data);
+    };
   }
-
-  Sync.prototype.fetch = function (id) {
-    return axios_1.default.get(this.rootUrl + "/" + id);
-  };
-
-  Sync.prototype.save = function (data) {
-    var id = data.id;
-
-    if (id) {
-      return axios_1.default.put(this.rootUrl + "/" + id, data);
-    }
-
-    return axios_1.default.post(this.rootUrl, data);
-  };
 
   return Sync;
 }();
@@ -2013,16 +2017,18 @@ var Attributes =
 /** @class */
 function () {
   function Attributes(data) {
+    var _this = this;
+
     this.data = data;
+
+    this.get = function (key) {
+      return _this.data[key];
+    };
+
+    this.set = function (update) {
+      _this.data = __assign(__assign({}, _this.data), update);
+    };
   }
-
-  Attributes.prototype.get = function (key) {
-    return this.data[key];
-  };
-
-  Attributes.prototype.set = function (update) {
-    this.data = __assign(__assign({}, this.data), update);
-  };
 
   return Attributes;
 }();
