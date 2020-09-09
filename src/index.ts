@@ -1,6 +1,6 @@
 import { User } from "./models/User";
 
-// const user = new User({ age: 20, name: "User 1", id: 1 });
+const user = new User({ age: 20, name: "User 1", id: 1 });
 // user.save();
 // user.event.on("change", () => {
 //   console.log("change #1");
@@ -10,3 +10,5 @@ import { User } from "./models/User";
 // });
 // // user.event.on("click", () => {});
 // user.event.trigger("change");
+
+console.log(user.get("name"));
