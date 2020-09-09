@@ -1,7 +1,8 @@
 import { User } from "../models/User";
+import { Model } from "../models/Model";
 
-export abstract class View {
-  constructor(public parent: Element, public model: User) {
+export abstract class View<T extends Model<K>, K> {
+  constructor(public parent: Element, public model: T) {
     this.bindModel();
   }
   abstract eventsMap(): { [key: string]: () => void };
