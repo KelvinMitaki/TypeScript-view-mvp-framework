@@ -1,14 +1,8 @@
-// import { User } from "./models/User";
+import { User } from "./models/User";
 
 import { UserForm } from "./views/UserForm";
 
-// // const user = User.buildUser({ name: "Last User", age: 30 });
-// // user.on("save", () => console.log(user));
+const user = User.buildUser({ name: "New User", age: 30 });
 
-// // user.save();
-// const collection = User.buildUserCollection();
-// collection.on("change", () => console.log(collection));
-// collection.fetch();
-
-const userForm = new UserForm(document.getElementById("root"));
+const userForm = new UserForm(document.getElementById("root"), user);
 userForm.render();

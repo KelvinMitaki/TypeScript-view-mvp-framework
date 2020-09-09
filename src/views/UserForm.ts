@@ -1,5 +1,7 @@
+import { User } from "../models/User";
+
 export class UserForm {
-  constructor(public parent: Element) {}
+  constructor(public parent: Element, public model: User) {}
 
   eventsMap(): { [key: string]: () => void } {
     return {
@@ -24,6 +26,8 @@ export class UserForm {
     return `
         <div>
             <h1>User Form</h1>
+            <p>User Name: ${this.model.get("name")}</p>
+            <p>Age: ${this.model.get("age")}</p>
             <input/>
             <button>Hi there</button>
         </div>
