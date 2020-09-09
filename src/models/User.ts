@@ -42,4 +42,12 @@ export class User {
       this.set(res.data);
     });
   }
+
+  save(): void {
+    const attr = this.attributes.getAll();
+    this.sync
+      .save(attr)
+      .then((res: AxiosResponse): void => this.trigger("save"))
+      .catch((): void => this.trigger("error"));
+  }
 }
