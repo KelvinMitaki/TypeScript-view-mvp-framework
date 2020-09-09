@@ -2086,6 +2086,20 @@ function () {
     this.event.trigger("change");
   };
 
+  User.prototype.fetch = function () {
+    var _this = this;
+
+    var id = this.get("id");
+
+    if (typeof id !== "number") {
+      throw new Error("Id must be provided");
+    }
+
+    this.sync.fetch(id).then(function (res) {
+      _this.set(res.data);
+    });
+  };
+
   return User;
 }();
 
@@ -2103,19 +2117,9 @@ var user = new User_1.User({
   age: 20,
   name: "User 1",
   id: 1
-}); // user.save();
-// user.event.on("change", () => {
-//   console.log("change #1");
-// });
-// user.event.on("change", () => {
-//   console.log("change #2");
-// });
-// // user.event.on("click", () => {});
-// user.event.trigger("change");
-
-console.log(user.get("name"));
+});
 user.on("change", function () {
-  return console.log("something was changed");
+  return console.log(user);
 });
 user.set({
   name: "User"

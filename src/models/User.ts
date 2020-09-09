@@ -1,6 +1,7 @@
 import { Eventing } from "./Eventing";
 import { Sync } from "./Sync";
 import { Attributes } from "./Attributes";
+import { AxiosResponse } from "axios";
 export interface UserProps {
   name?: string;
   age?: number;
@@ -27,8 +28,18 @@ export class User {
   get trigger() {
     return this.event.trigger;
   }
-  set(userProps: UserProps) {
+  set(userProps: UserProps): void {
     this.attributes.set(userProps);
     this.event.trigger("change");
+  }
+
+  fetch(): void {
+    const id = this.get("id");
+    if (typeof id !== "number") {
+      throw new Error("Id must be provided");
+    }
+    this.sync.fetch(id).then((res: AxiosResponse) => {
+      this.set(res.data);
+    });
   }
 }
