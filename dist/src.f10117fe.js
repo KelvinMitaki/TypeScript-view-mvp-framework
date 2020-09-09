@@ -2340,6 +2340,10 @@ function (_super) {
   function UserForm() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
+    _this.onSaveClick = function () {
+      _this.model.save();
+    };
+
     _this.setAgeClick = function () {
       _this.model.setRandomAge();
     };
@@ -2358,12 +2362,13 @@ function (_super) {
   UserForm.prototype.eventsMap = function () {
     return {
       "click:.setAge": this.setAgeClick,
-      "click:.setName": this.setNameClick
+      "click:.setName": this.setNameClick,
+      "click:.saveModel": this.onSaveClick
     };
   };
 
   UserForm.prototype.template = function () {
-    return "\n        <div>\n            <h1>User Form</h1>\n            <p>User Name: " + this.model.get("name") + "</p>\n            <p>Age: " + this.model.get("age") + "</p>\n            <input/>\n            <button class=\"setName\">Change Name</button>\n            <button class=\"setAge\">Set Random Age</button>\n        </div>\n        ";
+    return "\n        <div>\n            <input placeholder=\"" + this.model.get("name") + "\" />\n            <button class=\"setName\">Change Name</button>\n            <button class=\"setAge\">Set Random Age</button>\n            <button class=\"saveModel\">Save</button>\n        </div>\n        ";
   };
 
   return UserForm;
