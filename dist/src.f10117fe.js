@@ -129,14 +129,29 @@ var UserForm =
 /** @class */
 function () {
   function UserForm(parent) {
-    this.parent = parent;
-  }
+    var _this = this;
 
-  UserForm.prototype.eventsMap = function () {
-    return {
-      "click:button": this.onButtonClick
+    this.parent = parent;
+
+    this.eventsMap = function () {
+      return {
+        "click:button": _this.onButtonClick
+      };
     };
-  };
+
+    this.bindEvents = function (fragment) {
+      var events = _this.eventsMap;
+      Object.keys(events).forEach(function (key) {
+        var _a = key.split(":"),
+            eventName = _a[0],
+            selector = _a[1];
+
+        fragment.querySelectorAll(selector).forEach(function (element) {
+          element.addEventListener(eventName, events[key]);
+        });
+      });
+    };
+  }
 
   UserForm.prototype.onButtonClick = function () {
     console.log("Hi There");
