@@ -4,7 +4,9 @@ export abstract class View<T extends Model<K>, K> {
   constructor(public parent: Element, public model: T) {
     this.bindModel();
   }
-  abstract eventsMap(): { [key: string]: () => void };
+  eventsMap(): { [key: string]: () => void } {
+    return {};
+  }
   abstract template(): string;
   private bindModel(): void {
     this.model.on("change", () => {
