@@ -1,11 +1,25 @@
 import { Model } from "../models/Model";
 
 export abstract class View<T extends Model<K>, K> {
+  regions: { [key: string]: Element } = {};
   constructor(public parent: Element, public model: T) {
     this.bindModel();
   }
   eventsMap(): { [key: string]: () => void } {
     return {};
+  }
+  regionsMap(): { [key: string]: string } {
+    return {};
+  }
+  private mapRegions(fragment: DocumentFragment): void {
+    const regionsMap = this.regionsMap();
+    Object.keys(regionsMap).forEach((key: string): void => {
+      const selector = regionsMap[key];
+      const element = fragment.querySelector(selector);
+      if (element) {
+        this.regions[key] = element;
+      }
+    });
   }
   abstract template(): string;
   private bindModel(): void {

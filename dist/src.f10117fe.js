@@ -2260,11 +2260,30 @@ function () {
   function View(parent, model) {
     this.parent = parent;
     this.model = model;
+    this.regions = {};
     this.bindModel();
   }
 
   View.prototype.eventsMap = function () {
     return {};
+  };
+
+  View.prototype.regionsMap = function () {
+    return {};
+  };
+
+  View.prototype.mapRegions = function (fragment) {
+    var _this = this;
+
+    var regionsMap = this.regionsMap();
+    Object.keys(regionsMap).forEach(function (key) {
+      var selector = regionsMap[key];
+      var element = fragment.querySelector(selector);
+
+      if (element) {
+        _this.regions[key] = element;
+      }
+    });
   };
 
   View.prototype.bindModel = function () {
